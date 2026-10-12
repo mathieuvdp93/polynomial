@@ -12,7 +12,7 @@ int main() {
 
   long user_long;
   long result;
-  long coef[] = {3, 2, 5, 1, 7, 6};
+  long coef[] = {3, 2, -5, -1, 7, -6};
   int degree = 5;
 
   user_long = get_user_input();
@@ -51,7 +51,7 @@ bool check_polynomial_overflow(const long coef[], int degree, long user_input,
 
   long acc = coef[0];
 
-  for (int i = 0; i <= degree; i++) {
+  for (int i = 1; i <= degree; i++) {
     if (ckd_mul(&acc, acc, user_input))
       return false;
     if (ckd_add(&acc, coef[i], acc))
