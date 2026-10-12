@@ -1,18 +1,38 @@
 #include <errno.h>
+#include <stdbool.h>
+#include <stdckdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-long get_user_input();
-// int calculate_polynomial(int x);
+long get_user_input(void);
+bool check_polynomial_overflow(const long[], int, long, long *);
 
 int main() {
 
   long user_long;
+  long result;
+  long coef[] = {3, 2, 5, 1, 7, 6};
+  int degree = 5;
 
   user_long = get_user_input();
 
   printf("%ld\n", user_long);
+
+  // TODO: finish up calculating the polynomial
+
+  /*
+long result =
+((3 * (user_long * user_long * user_long * user_long * user_long)) +
+ (2 * (user_long * user_long * user_long * user_long)) -
+ (5 * (user_long * user_long * user_long)) - (user_long * user_long) +
+ (7 * user_long) - 6);
+                   */
+
+  check_polynomial_overflow(coef, degree, user_long, &result);
+
+  printf("The result is: %ld\n", result);
+
   /*
            leftover from testing the stdin stream with to large input for the
 fgets count
@@ -26,7 +46,23 @@ printf("%s\n", ui2);
   return 0;
 }
 
-long get_user_input() {
+bool check_polynomial_overflow(const long coef[], int degree, long user_input,
+                               long *result) {
+
+  long acc = coef[0];
+
+  for (int i = 0; i <= degree; i++) {
+    if (ckd_mul(&acc, acc, user_input))
+      return false;
+    if (ckd_add(&acc, coef[i], acc))
+      return false;
+  }
+
+  *result = acc;
+  return true;
+}
+
+long get_user_input(void) {
 
   long a;
   char buf[10];
@@ -41,9 +77,9 @@ long get_user_input() {
       exit(1);
     }
 
-    // checks if user didn't enter a number that was longer than buf, since buf
-    // is only 10 chars long errno == ERANGE will not be triggered because it
-    // would have to be 19 chars long
+    // checks if user didn't enter a number that was longer than buf, since
+    // buf is only 10 chars long errno == ERANGE will not be triggered because
+    // it would have to be 19 chars long
     if (strchr(buf, '\n') == NULL) {
       int c;
       while ((c = getchar()) != '\n' && c != EOF) {
