@@ -17,6 +17,7 @@ What I wanted to learn:
 - learned how to use strtol to check the input validity
 - learned how and what checks to do with strtol
 - the ERANGE check alone is not enough the check if the number entered by the user is too large or small, the user could enter a number that is more chars than the allocated buffer but not enough to be out of the range of a long, example: if buffer is 5 chars long fgets will cut it off at 4chars + '\0' so the user could enter a 25 char long number but fgets would cut it off at 4 chars so the  ERANGE check would never be triggered and the input would be "valid". so before strtol check with strchr(buf, '\n') == NULL to see if the buffer was read completely.
+- used ckd_mul ckd_add from the stdckdint library (c23 only) to check if the polynomial would overflow during the calculation. still don't understand very well how this function works.
 
 ## 🐛 Mistakes & Fixes
 
@@ -25,4 +26,4 @@ What I wanted to learn:
 
 ## ❓ Open Questions
 
-- 
+- look into ways to check for overflow, because i used one now but don't understand it very well.
